@@ -1,0 +1,52 @@
+The basic insfrastructure is built. Now I want the misc cuntions to be
+more flexible and less intrusive so I will implement a mapcar function
+to do virtually any lookup I want.
+
+void* mapcar(hash_table_t table, int (*iterator)(entry_t* entry, data_pool_t* pool), data_pool_t* pool, cacher_t* cacher);
+
+Parameters:
+table: the hash table to use.
+iterator: a function that
+runs over the entries in reverse entry-time order. Its parameters are
+the entry an the pool_data it should populate.
+pool: data to be used by the iterator.
+cacher: caches data and makes sure we do not iterate the same data
+again. Use an empty cacher to cache new data or NULL to not use
+caching at all.
+
+data_pool_t: unsigned size, void* data;
+
+the filter command
+A pair filters current_entry_list and pipes it on to the next pair. In the end the currnet_entry_list is piped to stdout or to the next commands until filter is called again (with no arguments resets the list).
+
+#  is aaaaa..aaa created in 22/5/2006?
+filter id aaaaaaaaaaaaaaaaaaaaaaaaa date 22/5/2006
+show
+
+#all entries from 22/4/1999
+filter date 22/4/1999
+show
+
+#Most recent entry
+filter date MAX
+show
+
+No arguments means clear
+
+Special values are MAX, MIN.
+TODO: vlaue ranges,lists
+
+filter* command:
+Like filter but append entries to the current entry list
+
+the show command:
+shows the current current_entry_list
+
+the append command:
+adds an entry given an entry string. Omitted fields are 0
+
+the stat command:
+shows the hash table statistics.
+
+The rm command:
+removes all entries in current_entry_list from the hash table permanentrly
